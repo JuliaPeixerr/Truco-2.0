@@ -1,0 +1,28 @@
+<div class="background">
+    <div class="player">
+        <div class="card-deck">
+            <div class="card">
+                <h4 class="card-left">2</h4>
+                <div [ngSwitch]="'Paus'" class="naipes">
+                  <img *ngSwitchCase="'Paus'" src="assets/img/naipes/PAUS.png" class="logo-align">
+                  <img *ngSwitchCase="'Copas'" src="assets/img/naipes/COPAS.png" class="logo-align copas">
+                  <img *ngSwitchCase="'Espadas'" src="assets/img/naipes/ESPADAS.png" class="logo-align">
+                  <img *ngSwitchCase="'Ouros'" src="assets/img/naipes/OUROS.png" class="logo-align">
+                </div>
+                <h4 class="card-rigth">2</h4>
+            </div>
+        </div>
+    </div>
+    
+    <div>
+    
+    </div>
+    
+    <div class="player">
+        <!-- <div class="card-deck">
+            <div class="card">
+
+            </div>
+        </div> -->
+    </div>
+</div>
