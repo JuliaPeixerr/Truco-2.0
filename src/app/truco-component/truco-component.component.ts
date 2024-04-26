@@ -47,6 +47,8 @@ export class TrucoComponentComponent implements OnInit {
       this.selectedBotCard = this.botCards[1];
       var winner = this.getWinner();
       console.log(winner, 'ganhador');
+      
+      this.removeCard(this.selectedBotCard!, this.botCards);
       this.selectedBotCard = undefined;
       this.selectedUserCard = undefined;
 

@@ -26,31 +26,46 @@
     display: flex;
     justify-content: row;
     gap: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
 .card {
     display: flex;
     flex-direction: column;
-    width: 60px;
-    height: 140px;
-    background-color: white;
+    width: 11%;
+    height: 60%;
+    background-color: #e9e9e9;
+    border-radius: 5px;
+    border: 1px solid #cecece;
+
+    .naipes {
+        text-align-last: center;
+
+        img {
+            width: 90%;
+
+            &.copas {
+                width: 70%;
+                height: 93%;
+            }
+        }
+    }
     
-    // &.isVirada {
-    //     border: 2px solid rgba(0, 0, 0, 0.2);
-    //     box-shadow: 1px 2px 2px 1px rgba(0, 0, 0, 0.2);
-    //     display: flex;
-    //     flex-direction: column;
-    //     width: 25%;
-    //     border-radius: 6px;
-    //     height: 140px;
-    //     transition: transform 0.1s ease-in-out;
-    // }
+    &:first-child {
+        transform: rotate(28deg);
+    }
 
-    // &:first-child {
-    //     transform: rotate(28deg);
-    // }
+    &:last-child {
+        transform: rotate(341deg)
+    }
 
-    // &:last-child {
-    //     transform: rotate(341deg)
-    // }
+    h4 {
+        font-size: 20px;
+
+        &.card-rigth {
+
+            text-align: -webkit-right;
+        }
+    }
 }
