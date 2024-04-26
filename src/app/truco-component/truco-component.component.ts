@@ -10,17 +10,93 @@ export class TrucoComponentComponent implements OnInit {
   gameStarted: boolean = false;
   cardCombination = new Set<string>();
   hideBotCards: boolean = true;
+  blockUser: boolean = false;
 
   cards: Card[] = [];
+  userCards: Card[] = [];
+  botCards: Card[] = [];
+  manilha!: Card;
+
+  selectedUserCard?: Card;
+  selectedBotCard?: Card;
 
   constructor() { }
 
   ngOnInit() {
+    this.distribuirCartas();
   }
 
-  
 
+  // LOGICA DE JOGO
 
+  selectUserCard(card: Card) {
+    this.removeCard(card, this.userCards);
+    this.selectedUserCard = card;
+    this.blockUser = true;
+    this.playBot();
+  }
+
+  private playBot() {
+    // Se o usuario que jogou primeiro
+    if (this.selectedUserCard != null) {
+      // colocar a logica para escolher carta do bot aqui depois
+      this.selectedBotCard = this.userCards[1];
+      
+    }
+    else {
+      // colocar a logica para escolher carta do bot aqui depois
+      this.selectedBotCard = this.userCards[0];
+      this.blockUser = false;
+    }
+  }
+
+  private removeCard(card: Card, deck: Card[]) {
+    const index = deck.indexOf(card);
+    if (index !== -1) {
+      deck.splice(index, 1);
+    }
+  }
+
+  // CALCULO DE PONTOS
+
+  private getWinner() {
+    // verifica se alguem jogou manilha -> ganha quem jogou ja
+    if (this.selectedBotCard?.numero == this.manilha.numero) {
+      return this.selectedBotCard;
+    }
+    if (this.selectedUserCard?.numero == this.manilha.numero) {
+      return this.selectedUserCard;
+    }
+    // se os dois jogaram manilha verifica o naipe
+    if (this.selectedBotCard?.numero == this.manilha.numero && this.selectedUserCard?.numero == this.manilha.numero) {
+      return this.verifyNaipe();
+    }
+    // verificação das outras cartas
+    return this.calculate();
+
+    // FAZER O CALCULO DO PLACAR DA RODADA E O GERAL !!!!!!
+  }
+
+  verifyNaipe(): Card {
+    var naipe = ['Paus', 'Copas', 'Espadas', 'Ouros'];
+    const user = naipe.indexOf(this.selectedUserCard?.naipe!);
+    const bot = naipe.indexOf(this.selectedBotCard?.naipe!);
+
+    let vencedor = user !== -1 && bot !== -1 && user > bot;
+    // testar ver se aqui esta certo o retorno
+    return vencedor ? this.selectedUserCard! : this.selectedBotCard!;
+  }
+
+  private calculate() {
+    // testar essa lista depois (o 4 do final)
+    var numeros = [4, 5, 6, 7, 10, 11, 12, 1, 2, 3, 4];
+    const user = numeros.indexOf(this.selectedUserCard?.numero ?? 0);
+    const bot = numeros.indexOf(this.selectedBotCard?.numero ?? 0);
+
+    let vencedor = user !== -1 && bot !== -1 && user > bot;
+    // testar ver se aqui esta certo o retorno
+    return vencedor ? this.selectedUserCard! : this.selectedBotCard!;
+  }
 
   // ESCONDER CARTAS DO BOT
 
@@ -34,7 +110,7 @@ export class TrucoComponentComponent implements OnInit {
 
   // EMBARALHAMENTO METHODS
 
-  distribuirCartas() {
+  private distribuirCartas() {
     if (this.gameStarted) return;
 
     let user = true;
@@ -51,10 +127,16 @@ export class TrucoComponentComponent implements OnInit {
         this.cardCombination.add(cardKey);
       }
     }
+    this.userCards = this.cards.slice(0,3);
+    this.botCards = this.cards.slice(3,6);
+    this.manilha = this.cards.slice(6,7)[0];
     this.gameStarted = true;
+    console.log(this.userCards, 'cartas do usuario');
+    console.log(this.botCards, 'cartas bot');
+    console.log(this.manilha, 'manilha');
   }
 
-  createRandomCard(user: boolean) {
+  private createRandomCard(user: boolean) {
     return ({
       numero: this.getRandomNumber(),
       naipe: this.getRandomNaipe(),
@@ -62,13 +144,13 @@ export class TrucoComponentComponent implements OnInit {
     }) as Card;
   }
 
-  getRandomNaipe() {
+  private getRandomNaipe() {
     const enumValues = Object.values(Naipe);
     const randomIndex = Math.floor(Math.random() * enumValues.length);
     return enumValues[randomIndex];
   }
 
-  getRandomNumber() {
+  private getRandomNumber() {
     let randomNumber;
     do {
       randomNumber = Math.floor(Math.random() * (12 - 1) + 1);

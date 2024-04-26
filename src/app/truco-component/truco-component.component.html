@@ -1,7 +1,7 @@
 <div class="background">
     <div class="player">
         <div class="card-deck">
-            <div class="card">
+            <div class="card" (click)="selectUserCard(userCards[0])">
                 <h4 class="card-left">2</h4>
                 <div [ngSwitch]="'Paus'" class="naipes">
                   <img *ngSwitchCase="'Paus'" src="assets/img/naipes/PAUS.png" class="logo-align">
