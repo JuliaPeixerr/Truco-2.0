@@ -34,11 +34,12 @@ export class TrucoComponentComponent implements OnInit {
   botPontGeral: number = 0;
 
   truco: number = 0;
+  ganhadorGeral: string = '';
 
   constructor(
     private gameService: GameService
   ) {
-   }
+  }
 
   ngOnInit() {
     this.distribuirCartas();
@@ -58,6 +59,11 @@ export class TrucoComponentComponent implements OnInit {
         this.distribuirCartas();
         this.resetPtRodada();
       }
+      else if (winner == 'user') {
+        this.blockUser = false;
+      } else if (winner == 'bot') {
+        this.playBot();
+      }
     }
     else
       this.playBot();
@@ -68,17 +74,15 @@ export class TrucoComponentComponent implements OnInit {
     if (this.selectedUserCard != null) {
       // colocar a logica para escolher carta do bot aqui depois
       this.selectedBotCard = this.gameService.chooseBotCard(this.botCards, this.empaxou, this.botPtRodada, this.manilha)
-      // this.selectedBotCard = this.botCards[1];
-      console.log('bot jogou', this.selectedBotCard)
       var winner = this.getWinner();
       this.removeCard(this.selectedBotCard!, this.botCards);
       this.selectedBotCard = undefined;
       this.selectedUserCard = undefined;
 
       if (this.finalizouRodada) {
+        this.gameStarted = false;
         this.distribuirCartas();
         this.resetPtRodada();
-        this.gameStarted = false;
       } else {
         if (winner == 'user') {
           this.blockUser = false;
@@ -87,13 +91,13 @@ export class TrucoComponentComponent implements OnInit {
           this.playBot();
         }
         else {
-          // aqui pega quem fez o primeiro ponto ou user
+          this.blockUser = false;
         }
       }
     }
     else {
       // colocar a logica para escolher carta do bot aqui depois
-      this.selectedBotCard = this.botCards[0];
+      this.selectedBotCard = this.gameService.chooseBotCard(this.botCards, this.empaxou, this.botPtRodada, this.manilha)
       this.blockUser = false;
     }
   }
@@ -109,7 +113,6 @@ export class TrucoComponentComponent implements OnInit {
 
   private getWinner() {
     // verifica se alguem jogou manilha -> ganha quem jogou ja
-    console.log('user', this.selectedUserCard, 'bot', this.selectedBotCard)
     if (this.selectedBotCard?.numero == this.manilha.numero) {
       this.distribuiPontuacao('bot');
       return 'bot';
@@ -125,6 +128,7 @@ export class TrucoComponentComponent implements OnInit {
     }
     // verificação das outras cartas
     let vencedor = this.calculate();
+    console.log('ganhador', vencedor)
     this.distribuiPontuacao(vencedor);
     return this.calculate()
 
@@ -184,6 +188,16 @@ export class TrucoComponentComponent implements OnInit {
     else if (vencedor == 'bot') {
       this.botPontGeral = this.botPontGeral + pontuacao;
     }
+
+    if (this.userPontGeral >= 12) {
+      this.ganhadorGeral = 'Usuario'
+      this.finalizouJogo = true;
+    }
+    else if (this.botPontGeral >= 12) {
+      this.ganhadorGeral = 'bot'
+      this.finalizouJogo = true;
+    }
+
   }
 
   isTruco() {
@@ -204,7 +218,7 @@ export class TrucoComponentComponent implements OnInit {
 
   private calculate() {
     // testar essa lista depois (o 4 do final)
-    var numeros = [4, 5, 6, 7, 10, 11, 12, 1, 2, 3, 4];
+    var numeros = [4, 5, 6, 7, 10, 11, 12, 1, 2, 3];
     const user = numeros.indexOf(this.selectedUserCard?.numero ?? 0);
     const bot = numeros.indexOf(this.selectedBotCard?.numero ?? 0);
 
@@ -231,6 +245,7 @@ export class TrucoComponentComponent implements OnInit {
     if (this.gameStarted) return;
     let user = true;
     let cont = 0
+    this.cards = [];
     while (this.cards.length < 7) {
       let card = this.createRandomCard(user);
       let cardKey = `${card.numero}-${card.naipe}`;
