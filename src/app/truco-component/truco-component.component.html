@@ -1,37 +1,104 @@
 <div class="background">
+    <!-- DECK DO BOT -->
     <div class="player">
         <div class="card-deck">
             <div class="card" *ngFor="let botCard of botCards">
-                <h4 class="card-left">{{botCard.numero}}</h4>
+                <h4>{{botCard.numero}}</h4>
                 <div [ngSwitch]="botCard.naipe" class="naipes">
-                    <img *ngSwitchCase="'Paus'" src="assets/img/naipes/PAUS.png" class="logo-align">
-                    <img *ngSwitchCase="'Copas'" src="assets/img/naipes/COPAS.png" class="logo-align copas">
-                    <img *ngSwitchCase="'Espadas'" src="assets/img/naipes/ESPADAS.png" class="logo-align">
-                    <img *ngSwitchCase="'Ouros'" src="assets/img/naipes/OUROS.png" class="logo-align">
+                    <img *ngSwitchCase="'Paus'" src="assets/img/naipes/PAUS.png">
+                    <img *ngSwitchCase="'Copas'" src="assets/img/naipes/COPAS.png" class="copas">
+                    <img *ngSwitchCase="'Espadas'" src="assets/img/naipes/ESPADAS.png">
+                    <img *ngSwitchCase="'Ouros'" src="assets/img/naipes/OUROS.png">
                 </div>
                 <h4 class="card-rigth">{{botCard.numero}}</h4>
             </div>
         </div>
     </div>
 
-    <div>
-        <!-- table -->
-        <div>bot pontuação {{botPontGeral}}</div>
-        <div>user pontuação {{userPontGeral}}</div>
-        <div>Manilha{{manilha.numero}}</div>
-        <button (click)="isTruco()">trucooo!!!</button>
-        <div *ngIf="finalizouJogo">Finalizou o jogo!!!!!!!!!!!!!</div>
+    <!-- TELA DE MANILHAS -->
+    <div class="principal-table">
+        <div class="manilhas-board">
+            <div class="manilhas-background">
+                <h3>MANILHAS</h3>
+                <div class="manilhas-list">
+                    <div class="manilha" *ngFor="let naipe of manilhasForFront">
+                        <h4 class="card-left">{{naipe.numero}}</h4>
+                        <div [ngSwitch]="naipe.naipe" class="manilha-naipes">
+                            <img *ngSwitchCase="'Paus'" src="assets/img/naipes/PAUS.png">
+                            <img *ngSwitchCase="'Copas'" src="assets/img/naipes/COPAS.png" class="copas">
+                            <img *ngSwitchCase="'Espadas'" src="assets/img/naipes/ESPADAS.png">
+                            <img *ngSwitchCase="'Ouros'" src="assets/img/naipes/OUROS.png">
+                        </div>
+                        <h4 class="card-rigth">{{naipe.numero}}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="middle-table">
+            <!-- TELA DO BARALHO + CARTA VIRADA NA MESA -->
+            <div class="baralho-table">
+                <img class="baralho" src="assets/img/cartas/baralho.png">
+                <div class="manilha-central">
+                    <h4 class="card-left">{{beforeManilha.numero}}</h4>
+                    <div [ngSwitch]="beforeManilha.naipe" class="naipes">
+                        <img *ngSwitchCase="'Paus'" src="assets/img/naipes/PAUS.png">
+                        <img *ngSwitchCase="'Copas'" src="assets/img/naipes/COPAS.png" class="copas">
+                        <img *ngSwitchCase="'Espadas'" src="assets/img/naipes/ESPADAS.png">
+                        <img *ngSwitchCase="'Ouros'" src="assets/img/naipes/OUROS.png">
+                    </div>
+                    <h4 class="card-rigth">{{beforeManilha.numero}}</h4>
+                </div>
+            </div>
+            <!-- CARTAS NA MESA -->
+            <div class="jogo-table">
+                <div class="battle-table">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA DE PLACAR -->
+        <div class="pontuacao-board">
+            <div class="pontuacao-background">
+                <h3>PLACAR</h3>
+                <div class="placar-container">
+                    <div class="placar-rows">
+                        <h4>Nós</h4>
+                        <h4>Eles</h4>
+                    </div>
+                    <div class="placar-rows mid-row">
+                        <div class="rodada"> <!-- ng for pontos rodada -->
+                            <div class="placar-rodada" [ngClass]="{'green': true}"></div>
+                            <div class="placar-rodada" [ngClass]="{'red': true}"></div>
+                            <div class="placar-rodada" [ngClass]="{'orange': true}"></div>
+                        </div>
+                        <div class="rodada"> <!-- ng for pontos rodada -->
+                            <div class="placar-rodada" [ngClass]="{'green': true}"></div>
+                            <div class="placar-rodada" [ngClass]="{'red': true}"></div>
+                            <div class="placar-rodada" [ngClass]="{'orange': true}"></div>
+                        </div>
+                    </div>
+                    <div class="placar-rows pontos">
+                        <h4>{{userPontGeral}}</h4>
+                        <h4>{{botPontGeral}}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- DECK DO JOGADOR -->
     <div class="player">
+        <button class="btn-truco" (click)="isTruco()">TRUCO</button>
         <div class="card-deck">
             <div class="card" *ngFor="let userCard of userCards" (click)="selectUserCard(userCard)">
-                <h4 class="card-left">{{userCard.numero}}</h4>
+                <h4>{{userCard.numero}}</h4>
                 <div [ngSwitch]="userCard.naipe" class="naipes">
-                    <img *ngSwitchCase="'Paus'" src="assets/img/naipes/PAUS.png" class="logo-align">
-                    <img *ngSwitchCase="'Copas'" src="assets/img/naipes/COPAS.png" class="logo-align copas">
-                    <img *ngSwitchCase="'Espadas'" src="assets/img/naipes/ESPADAS.png" class="logo-align">
-                    <img *ngSwitchCase="'Ouros'" src="assets/img/naipes/OUROS.png" class="logo-align">
+                    <img *ngSwitchCase="'Paus'" src="assets/img/naipes/PAUS.png">
+                    <img *ngSwitchCase="'Copas'" src="assets/img/naipes/COPAS.png" class="copas">
+                    <img *ngSwitchCase="'Espadas'" src="assets/img/naipes/ESPADAS.png">
+                    <img *ngSwitchCase="'Ouros'" src="assets/img/naipes/OUROS.png">
                 </div>
                 <h4 class="card-rigth">{{userCard.numero}}</h4>
             </div>

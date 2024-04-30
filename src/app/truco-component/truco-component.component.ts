@@ -18,13 +18,15 @@ export class TrucoComponentComponent implements OnInit {
   userCards: Card[] = [];
   botCards: Card[] = [];
   manilha!: Card;
+  beforeManilha!: Card;
+  manilhasForFront: Card[] = [];
+
   botPtRodada: number[] = [];
   userPtRodada: number[] = [];
   empaxou: boolean = false;
 
   selectedUserCard?: Card;
   selectedBotCard?: Card;
-
 
   finalizouRodada: boolean = false;
   ganhadorRodada: string = "";
@@ -243,6 +245,8 @@ export class TrucoComponentComponent implements OnInit {
 
   private distribuirCartas() {
     if (this.gameStarted) return;
+    this.manilhasForFront = [];
+    
     let user = true;
     let cont = 0
     this.cards = [];
@@ -261,8 +265,31 @@ export class TrucoComponentComponent implements OnInit {
     this.userCards = this.cards.slice(0, 3);
     this.botCards = this.cards.slice(3, 6);
     this.manilha = this.cards.slice(6, 7)[0];
-    console.log(this.manilha, 'manilha')
+
+    this.getBeforeManilha();
     this.gameStarted = true;
+  }
+
+  private getBeforeManilha() {
+    var numeros = [4, 5, 6, 7, 10, 11, 12, 1, 2, 3, 4];
+    var naipe = ['Paus', 'Copas', 'Espadas', 'Ouros'];
+    const index = numeros.indexOf(this.manilha?.numero ?? 0);
+    
+    naipe.forEach(n => {
+      this.manilhasForFront.push({
+        naipe: n,
+        numero: this.manilha.numero,
+        showing: true,
+        jogador: ''
+      })
+    });
+
+    this.beforeManilha = {
+      numero: numeros[index - 1] ?? 3,
+      naipe: this.getRandomNaipe(),
+      showing: true,
+      jogador: ''
+    } as Card;
   }
 
   private createRandomCard(user: boolean) {
