@@ -53,7 +53,26 @@
             <!-- CARTAS NA MESA -->
             <div class="jogo-table">
                 <div class="battle-table">
-                    
+                    <div class="selected-card" *ngIf="selectedBotCard">
+                        <h4 class="card-left">{{selectedBotCard.numero}}</h4>
+                        <div [ngSwitch]="selectedBotCard.naipe" class="naipes">
+                            <img *ngSwitchCase="'Paus'" src="assets/img/naipes/PAUS.png">
+                            <img *ngSwitchCase="'Copas'" src="assets/img/naipes/COPAS.png" class="copas">
+                            <img *ngSwitchCase="'Espadas'" src="assets/img/naipes/ESPADAS.png">
+                            <img *ngSwitchCase="'Ouros'" src="assets/img/naipes/OUROS.png">
+                        </div>
+                        <h4 class="card-rigth">{{selectedBotCard.numero}}</h4>
+                    </div>
+                    <div class="selected-card by-user" *ngIf="selectedUserCard">
+                        <h4 class="card-left">{{selectedUserCard.numero}}</h4>
+                        <div [ngSwitch]="selectedUserCard.naipe" class="naipes">
+                            <img *ngSwitchCase="'Paus'" src="assets/img/naipes/PAUS.png">
+                            <img *ngSwitchCase="'Copas'" src="assets/img/naipes/COPAS.png" class="copas">
+                            <img *ngSwitchCase="'Espadas'" src="assets/img/naipes/ESPADAS.png">
+                            <img *ngSwitchCase="'Ouros'" src="assets/img/naipes/OUROS.png">
+                        </div>
+                        <h4 class="card-rigth">{{selectedUserCard.numero}}</h4>
+                    </div>
                 </div>
             </div>
         </div>

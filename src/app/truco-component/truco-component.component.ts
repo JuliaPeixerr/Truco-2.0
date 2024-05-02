@@ -75,7 +75,8 @@ export class TrucoComponentComponent implements OnInit {
     // Se o usuario que jogou primeiro
     if (this.selectedUserCard != null) {
       // colocar a logica para escolher carta do bot aqui depois
-      this.selectedBotCard = this.gameService.chooseBotCard(this.botCards, this.empaxou, this.botPtRodada, this.manilha)
+      this.selectedBotCard = this.gameService.chooseBotCard(this.botCards, this.empaxou, this.botPtRodada, this.manilha);
+
       var winner = this.getWinner();
       this.removeCard(this.selectedBotCard!, this.botCards);
       this.selectedBotCard = undefined;
@@ -115,19 +116,22 @@ export class TrucoComponentComponent implements OnInit {
 
   private getWinner() {
     // verifica se alguem jogou manilha -> ganha quem jogou ja
-    if (this.selectedBotCard?.numero == this.manilha.numero) {
+    //verficar a manilha maior aqui
+    if (this.selectedBotCard?.numero == this.manilha.numero && this.selectedUserCard?.numero != this.manilha.numero) {
+      console.log(this.selectedBotCard, 'bot')
       this.distribuiPontuacao('bot');
       return 'bot';
     }
-    if (this.selectedUserCard?.numero == this.manilha.numero) {
+    if (this.selectedUserCard?.numero == this.manilha.numero && this.selectedBotCard?.numero != this.manilha.numero) {
+      console.log(this.selectedUserCard, 'user')
       this.distribuiPontuacao('user');
       return 'user';
     }
-    // se os dois jogaram manilha verifica o naipe
     if (this.selectedBotCard?.numero == this.manilha.numero && this.selectedUserCard?.numero == this.manilha.numero) {
       let vencedor = this.verifyNaipe();
       return vencedor;
     }
+    // se os dois jogaram manilha verifica o naipe
     // verificação das outras cartas
     let vencedor = this.calculate();
     console.log('ganhador', vencedor)
@@ -137,6 +141,8 @@ export class TrucoComponentComponent implements OnInit {
     // FAZER O CALCULO DO PLACAR DA RODADA E O GERAL !!!!!!
   }
 
+  verificarManilhaMaior() {
+  }
 
   //distribui a pontuação da rodada
   private distribuiPontuacao(vencedor: string) {
@@ -211,6 +217,7 @@ export class TrucoComponentComponent implements OnInit {
     var naipe = ['Paus', 'Copas', 'Espadas', 'Ouros'];
     const user = naipe.indexOf(this.selectedUserCard?.naipe!);
     const bot = naipe.indexOf(this.selectedBotCard?.naipe!);
+    console.log(user, bot)
 
     let vencedor = user !== -1 && bot !== -1 && user > bot;
     // testar ver se aqui esta certo o retorno
