@@ -87,15 +87,15 @@
                         <h4>Eles</h4>
                     </div>
                     <div class="placar-rows mid-row">
-                        <div class="rodada"> <!-- ng for pontos rodada -->
-                            <div class="placar-rodada" [ngClass]="{'green': true}"></div>
-                            <div class="placar-rodada" [ngClass]="{'red': true}"></div>
-                            <div class="placar-rodada" [ngClass]="{'orange': true}"></div>
+                        <div class="rodada" *ngFor="let cor of coresUsu"> <!-- ng for pontos rodada -->
+                            <div class="placar-rodada" *ngIf="cor == 'verde'" [ngClass]="{'green': true}"></div>
+                            <div class="placar-rodada" *ngIf="cor == 'vermelho'" [ngClass]="{'red': true}"></div>
+                            <div class="placar-rodada" *ngIf="cor == 'laranja'" [ngClass]="{'orange': true}"></div>
                         </div>
-                        <div class="rodada"> <!-- ng for pontos rodada -->
-                            <div class="placar-rodada" [ngClass]="{'green': true}"></div>
-                            <div class="placar-rodada" [ngClass]="{'red': true}"></div>
-                            <div class="placar-rodada" [ngClass]="{'orange': true}"></div>
+                        <div class="rodada" *ngFor="let cor of coresBot"> <!-- ng for pontos rodada -->
+                            <div class="placar-rodada" *ngIf="cor == 'verde'"  [ngClass]="{'green': true}"></div>
+                            <div class="placar-rodada" *ngIf="cor == 'vermelho'" [ngClass]="{'red': true}"></div>
+                            <div class="placar-rodada" *ngIf="cor == 'laranja'" [ngClass]="{'orange': true}"></div>
                         </div>
                     </div>
                     <div class="placar-rows pontos">

@@ -38,6 +38,10 @@ export class TrucoComponentComponent implements OnInit {
   truco: number = 0;
   ganhadorGeral: string = '';
 
+  coresBot: string[] =  [];
+  coresUsu: string[] = [];
+  contagemRodada: number = 0;
+
   constructor(
     private gameService: GameService
   ) {
@@ -55,6 +59,9 @@ export class TrucoComponentComponent implements OnInit {
     this.blockUser = true;
     if (this.selectedBotCard) {
       var winner = this.getWinner();
+      this.contagemRodada = this.contagemRodada + 1;
+      this.trocaCor(winner);
+      console.log(this.coresBot, this.coresUsu)
       this.removeCard(this.selectedBotCard, this.botCards);
       if (this.finalizouRodada) {
         this.gameStarted = false;
@@ -71,6 +78,24 @@ export class TrucoComponentComponent implements OnInit {
       this.playBot();
   }
 
+  //trocar a cor do placar
+
+  private trocaCor(vencedor: string) {
+    console.log('entrou')
+    if (vencedor == "bot") {
+      this.coresBot.push("verde");
+      this.coresUsu.push("vermelho");
+    }
+    else if (vencedor == "user") {
+      this.coresBot.push("vermelho");
+      this.coresUsu.push("verde");
+    } else {
+      // this.coresBot.push("branco");
+      this.coresUsu.push("laranja");
+    }
+
+  }
+
   private playBot() {
     // Se o usuario que jogou primeiro
     if (this.selectedUserCard != null) {
@@ -78,6 +103,7 @@ export class TrucoComponentComponent implements OnInit {
       this.selectedBotCard = this.gameService.chooseBotCard(this.botCards, this.empaxou, this.botPtRodada, this.manilha);
 
       var winner = this.getWinner();
+      this.trocaCor(winner);
       this.removeCard(this.selectedBotCard!, this.botCards);
       this.selectedBotCard = undefined;
       this.selectedUserCard = undefined;
@@ -253,7 +279,7 @@ export class TrucoComponentComponent implements OnInit {
   private distribuirCartas() {
     if (this.gameStarted) return;
     this.manilhasForFront = [];
-    
+
     let user = true;
     let cont = 0
     this.cards = [];
@@ -281,7 +307,7 @@ export class TrucoComponentComponent implements OnInit {
     var numeros = [4, 5, 6, 7, 10, 11, 12, 1, 2, 3, 4];
     var naipe = ['Paus', 'Copas', 'Espadas', 'Ouros'];
     const index = numeros.indexOf(this.manilha?.numero ?? 0);
-    
+
     naipe.forEach(n => {
       this.manilhasForFront.push({
         naipe: n,
