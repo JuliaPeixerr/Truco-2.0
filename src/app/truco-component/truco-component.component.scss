@@ -370,6 +370,8 @@
                 }
 
                 &.mid-row {
+                    display: flex;
+                    flex-direction: row;
                     justify-content: left;
                     height: 100%;
                 }
@@ -398,6 +400,10 @@
                     .orange {
                         background-color: orange;
                     }
+
+                    .branco {
+                        background-color: white;
+                    } 
                 }
             }
         }

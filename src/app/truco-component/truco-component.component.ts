@@ -38,7 +38,7 @@ export class TrucoComponentComponent implements OnInit {
   truco: number = 0;
   ganhadorGeral: string = '';
 
-  coresBot: string[] =  [];
+  coresBot: string[] = [];
   coresUsu: string[] = [];
   contagemRodada: number = 0;
 
@@ -48,6 +48,7 @@ export class TrucoComponentComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.startPlacar();
     this.distribuirCartas();
   }
 
@@ -59,23 +60,34 @@ export class TrucoComponentComponent implements OnInit {
     this.blockUser = true;
     if (this.selectedBotCard) {
       var winner = this.getWinner();
-      this.contagemRodada = this.contagemRodada + 1;
+
       this.trocaCor(winner);
-      console.log(this.coresBot, this.coresUsu)
+      this.contagemRodada = this.contagemRodada + 1;
       this.removeCard(this.selectedBotCard, this.botCards);
       if (this.finalizouRodada) {
         this.gameStarted = false;
-        this.distribuirCartas();
+        setTimeout(() => {
+          this.selectedBotCard = undefined;
+          this.selectedUserCard = undefined;
+          this.distribuirCartas();
+        }, 2000);
         this.resetPtRodada();
+        this.startPlacar();
       }
       else if (winner == 'user') {
         this.blockUser = false;
       } else if (winner == 'bot') {
         this.playBot();
       }
+
     }
     else
       this.playBot();
+  }
+
+  private startPlacar() {
+    this.coresBot = ['branco', 'branco', 'branco'];
+    this.coresUsu = ['branco', 'branco', 'branco'];
   }
 
   //trocar a cor do placar
@@ -83,15 +95,15 @@ export class TrucoComponentComponent implements OnInit {
   private trocaCor(vencedor: string) {
     console.log('entrou')
     if (vencedor == "bot") {
-      this.coresBot.push("verde");
-      this.coresUsu.push("vermelho");
+      this.coresBot[this.contagemRodada] = "verde";
+      this.coresUsu[this.contagemRodada] = "vermelho";
     }
     else if (vencedor == "user") {
-      this.coresBot.push("vermelho");
-      this.coresUsu.push("verde");
+      this.coresBot[this.contagemRodada] = "vermelho";
+      this.coresUsu[this.contagemRodada] = "verde";
     } else {
-      // this.coresBot.push("branco");
-      this.coresUsu.push("laranja");
+      this.coresBot[this.contagemRodada] = "laranja";
+      this.coresUsu[this.contagemRodada] = "laranja";
     }
 
   }
@@ -100,24 +112,35 @@ export class TrucoComponentComponent implements OnInit {
     // Se o usuario que jogou primeiro
     if (this.selectedUserCard != null) {
       // colocar a logica para escolher carta do bot aqui depois
-      this.selectedBotCard = this.gameService.chooseBotCard(this.botCards, this.empaxou, this.botPtRodada, this.manilha);
 
+      this.selectedBotCard = this.gameService.chooseBotCard(this.botCards, this.empaxou, this.botPtRodada, this.manilha);
+      console.log('chegou')
       var winner = this.getWinner();
+
       this.trocaCor(winner);
       this.removeCard(this.selectedBotCard!, this.botCards);
-      this.selectedBotCard = undefined;
-      this.selectedUserCard = undefined;
+      setTimeout(() => {
+        console.log(this.selectUserCard)
+        this.selectedBotCard = undefined;
+        this.selectedUserCard = undefined;
+      }, 2000);
+      this.contagemRodada = this.contagemRodada + 1;
 
       if (this.finalizouRodada) {
         this.gameStarted = false;
-        this.distribuirCartas();
+        setTimeout(() => {
+          this.distribuirCartas();
+        }, 2000);
         this.resetPtRodada();
+        this.startPlacar()
       } else {
         if (winner == 'user') {
           this.blockUser = false;
         }
         else if (winner == 'bot') {
-          this.playBot();
+          setTimeout(() => {
+            this.playBot();
+          }, 3000);
         }
         else {
           this.blockUser = false;
@@ -144,16 +167,17 @@ export class TrucoComponentComponent implements OnInit {
     // verifica se alguem jogou manilha -> ganha quem jogou ja
     //verficar a manilha maior aqui
     if (this.selectedBotCard?.numero == this.manilha.numero && this.selectedUserCard?.numero != this.manilha.numero) {
-      console.log(this.selectedBotCard, 'bot')
+      console.log(this.selectedBotCard, 'botManilha')
       this.distribuiPontuacao('bot');
       return 'bot';
     }
     if (this.selectedUserCard?.numero == this.manilha.numero && this.selectedBotCard?.numero != this.manilha.numero) {
-      console.log(this.selectedUserCard, 'user')
+      console.log(this.selectedUserCard, 'userManilha')
       this.distribuiPontuacao('user');
       return 'user';
     }
     if (this.selectedBotCard?.numero == this.manilha.numero && this.selectedUserCard?.numero == this.manilha.numero) {
+      console.log('verificaNaipe')
       let vencedor = this.verifyNaipe();
       return vencedor;
     }
@@ -196,6 +220,8 @@ export class TrucoComponentComponent implements OnInit {
     this.botPtRodada = [];
     this.empaxou = false;
     this.truco = 0;
+    this.coresBot = [];
+    this.coresUsu = [];
   }
 
   //verifica o fim da rodada
