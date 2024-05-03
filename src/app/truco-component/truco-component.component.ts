@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Card, Naipe } from '../domain/Card';
-import { log } from 'console';
 import { GameService } from './truco.service';
 
 @Component({
@@ -79,7 +78,6 @@ export class TrucoComponentComponent implements OnInit {
       } else if (winner == 'bot') {
         this.playBot();
       }
-
     }
     else
       this.playBot();
@@ -90,10 +88,7 @@ export class TrucoComponentComponent implements OnInit {
     this.coresUsu = ['branco', 'branco', 'branco'];
   }
 
-  //trocar a cor do placar
-
   private trocaCor(vencedor: string) {
-    console.log('entrou')
     if (vencedor == "bot") {
       this.coresBot[this.contagemRodada] = "verde";
       this.coresUsu[this.contagemRodada] = "vermelho";
@@ -105,22 +100,18 @@ export class TrucoComponentComponent implements OnInit {
       this.coresBot[this.contagemRodada] = "laranja";
       this.coresUsu[this.contagemRodada] = "laranja";
     }
-
   }
 
   private playBot() {
     // Se o usuario que jogou primeiro
     if (this.selectedUserCard != null) {
       // colocar a logica para escolher carta do bot aqui depois
-
       this.selectedBotCard = this.gameService.chooseBotCard(this.botCards, this.empaxou, this.botPtRodada, this.manilha);
-      console.log('chegou')
       var winner = this.getWinner();
-
       this.trocaCor(winner);
+
       this.removeCard(this.selectedBotCard!, this.botCards);
       setTimeout(() => {
-        console.log(this.selectUserCard)
         this.selectedBotCard = undefined;
         this.selectedUserCard = undefined;
       }, 2000);
@@ -167,31 +158,22 @@ export class TrucoComponentComponent implements OnInit {
     // verifica se alguem jogou manilha -> ganha quem jogou ja
     //verficar a manilha maior aqui
     if (this.selectedBotCard?.numero == this.manilha.numero && this.selectedUserCard?.numero != this.manilha.numero) {
-      console.log(this.selectedBotCard, 'botManilha')
       this.distribuiPontuacao('bot');
       return 'bot';
     }
     if (this.selectedUserCard?.numero == this.manilha.numero && this.selectedBotCard?.numero != this.manilha.numero) {
-      console.log(this.selectedUserCard, 'userManilha')
       this.distribuiPontuacao('user');
       return 'user';
     }
     if (this.selectedBotCard?.numero == this.manilha.numero && this.selectedUserCard?.numero == this.manilha.numero) {
-      console.log('verificaNaipe')
       let vencedor = this.verifyNaipe();
       return vencedor;
     }
     // se os dois jogaram manilha verifica o naipe
     // verificação das outras cartas
     let vencedor = this.calculate();
-    console.log('ganhador', vencedor)
     this.distribuiPontuacao(vencedor);
     return this.calculate()
-
-    // FAZER O CALCULO DO PLACAR DA RODADA E O GERAL !!!!!!
-  }
-
-  verificarManilhaMaior() {
   }
 
   //distribui a pontuação da rodada
@@ -222,6 +204,7 @@ export class TrucoComponentComponent implements OnInit {
     this.truco = 0;
     this.coresBot = [];
     this.coresUsu = [];
+    this.contagemRodada = 0;
   }
 
   //verifica o fim da rodada
@@ -257,7 +240,6 @@ export class TrucoComponentComponent implements OnInit {
       this.ganhadorGeral = 'bot'
       this.finalizouJogo = true;
     }
-
   }
 
   isTruco() {
@@ -269,7 +251,6 @@ export class TrucoComponentComponent implements OnInit {
     var naipe = ['Paus', 'Copas', 'Espadas', 'Ouros'];
     const user = naipe.indexOf(this.selectedUserCard?.naipe!);
     const bot = naipe.indexOf(this.selectedBotCard?.naipe!);
-    console.log(user, bot)
 
     let vencedor = user !== -1 && bot !== -1 && user > bot;
     // testar ver se aqui esta certo o retorno
@@ -282,12 +263,15 @@ export class TrucoComponentComponent implements OnInit {
     var numeros = [4, 5, 6, 7, 10, 11, 12, 1, 2, 3];
     const user = numeros.indexOf(this.selectedUserCard?.numero ?? 0);
     const bot = numeros.indexOf(this.selectedBotCard?.numero ?? 0);
+    let vencedor: string;
 
-    console.log(user, bot, "calu")
-
-    let vencedor = user !== -1 && bot !== -1 && user > bot;
-    // testar ver se aqui esta certo o retorno
-    return vencedor ? 'user' : 'bot';
+    if (user > bot) {
+      return vencedor = 'user';
+    } else if (user < bot) {
+      return vencedor = 'bot';
+    } else {
+      return vencedor = 'empate';
+    }
   }
 
   // ESCONDER CARTAS DO BOT
