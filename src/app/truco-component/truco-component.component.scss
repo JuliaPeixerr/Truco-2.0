@@ -21,6 +21,52 @@
         border-radius: 15px 15px 0 0;
     }
 
+    .btn-hide {
+        background-color: #858381;
+        border: solid transparent;
+        border-radius: 16px;
+        border-width: 0 0 4px;
+        color: #ffffff;
+        text-shadow: 2px 2px 4px #332f2b;
+        letter-spacing: 2px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 3px 0;
+        transform: translateZ(0);
+        width: 110px;
+        height: 50px;
+        position: fixed;
+        top: 2%;
+        left: 1%;
+        z-index: 99;
+
+        &::after {
+            background-clip: padding-box;
+            background-color: #a8a7a7;
+            border: solid transparent;
+            border-radius: 16px;
+            border-width: 0 0 4px;
+            bottom: -4px;
+            content: "";
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: -1;
+        }
+    
+        &:hover:not(:disabled) {
+            filter: brightness(1.1);
+            -webkit-filter: brightness(1.1);
+        }
+    
+        &:active {
+            border-width: 4px 0 0;
+            background: none;
+        }
+    }
+
     .btn-truco {
         background-color: #d68418;
         border: solid transparent;
@@ -85,6 +131,19 @@
     border-radius: 5px;
     border: 2px solid #a8a7a7;
     box-shadow: 2px 2px 4px #6b635c;
+
+    &.no-background {
+        background-color: rgba(255, 255, 255, 0.08);
+        border: none;
+        box-shadow: none;
+    }
+    
+    .turned {
+        object-fit: cover;
+        height: 180px;
+        position: relative;
+        top: -22px;
+    }
 
     .naipes {
         text-align-last: center;

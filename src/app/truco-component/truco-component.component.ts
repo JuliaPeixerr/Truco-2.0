@@ -276,12 +276,11 @@ export class TrucoComponentComponent implements OnInit {
 
   // ESCONDER CARTAS DO BOT
 
-  hideCards(event: any) {
-    const botCard = this.cards.slice(3, 6)
-    botCard.forEach(card => {
-      card.showing = event;
+  hideCards() {
+    this.hideBotCards = !this.hideBotCards;
+    this.botCards.forEach(card => {
+      card.showing = this.hideBotCards;
     })
-    this.hideBotCards = event;
   }
 
   // EMBARALHAMENTO METHODS

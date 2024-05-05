@@ -2,17 +2,21 @@
     <!-- DECK DO BOT -->
     <div class="player">
         <div class="card-deck">
-            <div class="card" *ngFor="let botCard of botCards">
-                <h4>{{botCard.numero}}</h4>
-                <div [ngSwitch]="botCard.naipe" class="naipes">
+            <div class="card" *ngFor="let botCard of botCards" [ngClass]="{'no-background': hideBotCards}">
+                <div>
+                    <img class="turned" *ngIf="hideBotCards" src="assets/img/cartas/cartaVirada.png">
+                </div>
+                <h4 *ngIf="!hideBotCards">{{botCard.numero}}</h4>
+                <div [ngSwitch]="botCard.naipe" class="naipes" *ngIf="!hideBotCards">
                     <img *ngSwitchCase="'Paus'" src="assets/img/naipes/PAUS.png">
                     <img *ngSwitchCase="'Copas'" src="assets/img/naipes/COPAS.png" class="copas">
                     <img *ngSwitchCase="'Espadas'" src="assets/img/naipes/ESPADAS.png">
                     <img *ngSwitchCase="'Ouros'" src="assets/img/naipes/OUROS.png">
                 </div>
-                <h4 class="card-rigth">{{botCard.numero}}</h4>
+                <h4 *ngIf="!hideBotCards" class="card-rigth">{{botCard.numero}}</h4>
             </div>
         </div>
+        <button class="btn-hide" (click)="hideCards()">Ver Cartas</button>
     </div>
 
     <!-- TELA DE MANILHAS -->
