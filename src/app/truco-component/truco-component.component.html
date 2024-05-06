@@ -87,10 +87,18 @@
                 <h3>PLACAR</h3>
                 <div class="placar-container">
                     <div class="placar-rows">
-                        <h4>Nós</h4>
                         <h4>Eles</h4>
+                        <h4>Nós</h4>
                     </div>
                     <div class="placar-rows mid-row">
+                        <div style="display: flex;">
+                            <div class="rodada" *ngFor="let cor of coresBot">
+                                <div class="placar-rodada" *ngIf="cor == 'verde'" [ngClass]="{'green': true}"></div>
+                                <div class="placar-rodada" *ngIf="cor == 'vermelho'" [ngClass]="{'red': true}"></div>
+                                <div class="placar-rodada" *ngIf="cor == 'laranja'" [ngClass]="{'orange': true}"></div>
+                                <div class="placar-rodada" *ngIf="cor == 'branco'" [ngClass]="{'branco': true}"></div>
+                            </div>
+                        </div>
                         <div style="display: flex;">
                             <div class="rodada" *ngFor="let cor of coresUsu"> <!-- ng for pontos rodada -->
                                 <div class="placar-rodada" *ngIf="cor == 'verde'" [ngClass]="{'green': true}"></div>
@@ -99,18 +107,10 @@
                                 <div class="placar-rodada" *ngIf="cor == 'branco'" [ngClass]="{'branco': true}"></div>
                             </div>
                         </div>
-                        <div style="display: flex;">
-                            <div class="rodada" *ngFor="let cor of coresBot"> <!-- ng for pontos rodada -->
-                                <div class="placar-rodada" *ngIf="cor == 'verde'"  [ngClass]="{'green': true}"></div>
-                                <div class="placar-rodada" *ngIf="cor == 'vermelho'" [ngClass]="{'red': true}"></div>
-                                <div class="placar-rodada" *ngIf="cor == 'laranja'" [ngClass]="{'orange': true}"></div>
-                                <div class="placar-rodada" *ngIf="cor == 'branco'" [ngClass]="{'branco': true}"></div>
-                            </div>
-                        </div>
                     </div>
                     <div class="placar-rows pontos">
-                        <h4>{{userPontGeral}}</h4>
                         <h4>{{botPontGeral}}</h4>
+                        <h4>{{userPontGeral}}</h4>
                     </div>
                 </div>
             </div>

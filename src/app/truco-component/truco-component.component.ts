@@ -59,15 +59,16 @@ export class TrucoComponentComponent implements OnInit {
     this.blockUser = true;
     if (this.selectedBotCard) {
       var winner = this.getWinner();
-
       this.trocaCor(winner);
       this.contagemRodada = this.contagemRodada + 1;
       this.removeCard(this.selectedBotCard, this.botCards);
+      setTimeout(() => {
+        this.selectedBotCard = undefined;
+        this.selectedUserCard = undefined;
+      }, 2000);
       if (this.finalizouRodada) {
         this.gameStarted = false;
         setTimeout(() => {
-          this.selectedBotCard = undefined;
-          this.selectedUserCard = undefined;
           this.distribuirCartas();
         }, 2000);
         this.resetPtRodada();
@@ -157,7 +158,7 @@ export class TrucoComponentComponent implements OnInit {
   private getWinner() {
     // verifica se alguem jogou manilha -> ganha quem jogou ja
     //verficar a manilha maior aqui
-    if (this.selectedBotCard?.numero == this.manilha.numero && this.selectedUserCard?.numero != this.manilha.numero) {
+    if (this.selectedBotCard?.numero == this.manilha.numero && this.selectedUserCard?.numero != this.manilha.numero) {  
       this.distribuiPontuacao('bot');
       return 'bot';
     }
