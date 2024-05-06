@@ -70,9 +70,9 @@ export class TrucoComponentComponent implements OnInit {
         this.gameStarted = false;
         setTimeout(() => {
           this.distribuirCartas();
+          this.resetPtRodada();
+          this.startPlacar();
         }, 2000);
-        this.resetPtRodada();
-        this.startPlacar();
       }
       else if (winner == 'user') {
         this.blockUser = false;
@@ -81,7 +81,9 @@ export class TrucoComponentComponent implements OnInit {
       }
     }
     else
-      this.playBot();
+      setTimeout(() => {
+        this.playBot();
+      }, 3000);
   }
 
   private startPlacar() {
@@ -122,9 +124,9 @@ export class TrucoComponentComponent implements OnInit {
         this.gameStarted = false;
         setTimeout(() => {
           this.distribuirCartas();
+          this.resetPtRodada();
+          this.startPlacar()
         }, 2000);
-        this.resetPtRodada();
-        this.startPlacar()
       } else {
         if (winner == 'user') {
           this.blockUser = false;
